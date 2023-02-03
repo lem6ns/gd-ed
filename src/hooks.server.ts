@@ -27,9 +27,15 @@ export const handle = SvelteKitAuth({
 			return token;
 		},
 		async session({ session, token }) {
-			session.user.id = token.id;
-			session.user.inServer = token.inServer;
-			return session;
+			return {
+                ...session,
+                user: {
+                    name: session.user?.name,
+                    image: session.user?.image,
+                    id: token.id,
+                    inServer: token.inServer
+                }
+            };
 		},
 	},
 	providers: [
