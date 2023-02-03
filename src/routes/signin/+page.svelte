@@ -2,9 +2,11 @@
     import { signIn, signOut } from "@auth/sveltekit/client";
     import { page } from "$app/stores";
     import { onMount } from "svelte";
+    import { goto } from "$app/navigation";
 
     onMount(() => {
-        if ($page.data.session?.user && !$page.data.session?.user?.inServer) signOut();
+        if ($page.data.session?.user?.inServer) goto("/")
+        if ($page.data.session && !$page.data.session?.user?.inServer) return signOut();
     })
 </script>
 
