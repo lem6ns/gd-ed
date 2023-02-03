@@ -3,6 +3,7 @@
     import "@skeletonlabs/skeleton/styles/all.css";
     import "../app.postcss";
     import { AppShell, AppBar } from "@skeletonlabs/skeleton";
+    import { page } from "$app/stores";
 </script>
 
 <!-- App Shell -->
@@ -14,7 +15,17 @@
                 <strong class="text-xl uppercase">gd-ed</strong>
             </svelte:fragment>
             <svelte:fragment slot="trail">
-                Trail
+                {#if $page.data.session}
+                    {#if $page.data.session.user?.image}
+                        <img
+                            class="h-8 w-8 rounded-full"
+                            alt="Profile"
+                            src={$page.data.session.user.image}
+                        />
+                    {/if}
+                {:else}
+                    <a class="text-sm p-1.5 rounded-lg bg-slate-500" href="/signin">Sign In</a>
+                {/if}
             </svelte:fragment>
         </AppBar>
     </svelte:fragment>

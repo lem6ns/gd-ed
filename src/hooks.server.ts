@@ -11,6 +11,7 @@ export const handle = SvelteKitAuth({
 		async jwt({ token, account }) {
 			if (account || Number(token.lastCheck) + 60 * 1000 < Date.now()) {
 				token.accessToken = account?.access_token ?? token.accessToken;
+				token.lastCheck = Date.now();
 				const resp = await fetch("https://discord.com/api/users/@me/guilds", {
 					headers: {
 						Authorization: `Bearer ${token.accessToken}`,
@@ -22,20 +23,19 @@ export const handle = SvelteKitAuth({
 				token.inServer = !!resp.find(
 					(server: { id: string }) => server.id === DISCORD_SERVER_ID,
 				);
-				token.lastCheck = Date.now();
 			}
 			return token;
 		},
 		async session({ session, token }) {
 			return {
-                ...session,
-                user: {
-                    name: session.user?.name,
-                    image: session.user?.image,
-                    id: token.id,
-                    inServer: token.inServer
-                }
-            };
+				...session,
+				user: {
+					name: session.user?.name,
+					image: session.user?.image,
+					id: token.id,
+					inServer: token.inServer,
+				},
+			};
 		},
 	},
 	providers: [
