@@ -12,12 +12,12 @@
 
 <div class="h-full w-full flex justify-center items-center bg-gray-800">
     <div
-        class="w-1/3 h-48 bg-gray-900 text-center flex justify-center items-center rounded-2xl"
+        class="w-1/3 h-1/6 lg:h-48 bg-gray-900 text-center flex justify-center items-center rounded-2xl"
     >
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <div class="rounded-2xl w-1/2 h-1/2 bg-[#5865F2] flex justify-center items-center cursor-pointer" on:click={() => signIn("discord")}>
             <svg
-                class="w-1/4 pr-8"
+                class="w-1/2 md:w-1/6 lg:w-1/4 lg:pr-8"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 127.14 96.36"
                 ><defs
@@ -39,7 +39,7 @@
                     ></g
                 ></svg
             >
-            <span class="text-xl">Sign In With Discord</span>
+            <span class="hidden lg:block text-xl">Sign In With Discord</span>
         </div>
     </div>
 </div>
