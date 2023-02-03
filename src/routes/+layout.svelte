@@ -6,6 +6,7 @@
     import { page } from "$app/stores";
     import { onMount } from "svelte";
     import { signOut } from "@auth/sveltekit/client";
+    import { PUBLIC_INSTANCE_NAME } from "$env/static/public";
 
     onMount(() => {
         if ($page.data.session && !$page.data.session?.user?.inServer)
@@ -13,13 +14,17 @@
     });
 </script>
 
+<svelte:head>
+    <title>{PUBLIC_INSTANCE_NAME}</title>
+</svelte:head>
+
 <!-- App Shell -->
 <AppShell slotSidebarLeft="bg-surface-500/5 w-56 p-4">
     <svelte:fragment slot="header">
         <!-- App Bar -->
         <AppBar>
             <svelte:fragment slot="lead">
-                <strong class="text-xl uppercase">gd-ed</strong>
+                <strong class="text-xl uppercase">{PUBLIC_INSTANCE_NAME}</strong>
             </svelte:fragment>
             <svelte:fragment slot="trail">
                 {#if $page.data.session}
@@ -30,11 +35,6 @@
                             src={$page.data.session.user.image}
                         />
                     {/if}
-                {:else}
-                    <a
-                        class="text-sm p-1.5 rounded-lg bg-slate-500"
-                        href="/signin">Sign In</a
-                    >
                 {/if}
             </svelte:fragment>
         </AppBar>
