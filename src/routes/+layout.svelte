@@ -4,6 +4,13 @@
     import "../app.postcss";
     import { AppShell, AppBar } from "@skeletonlabs/skeleton";
     import { page } from "$app/stores";
+    import { onMount } from "svelte";
+    import { signOut } from "@auth/sveltekit/client";
+
+    onMount(() => {
+        if ($page.data.session && !$page.data.session?.user?.inServer)
+            return signOut();
+    });
 </script>
 
 <!-- App Shell -->
@@ -24,7 +31,10 @@
                         />
                     {/if}
                 {:else}
-                    <a class="text-sm p-1.5 rounded-lg bg-slate-500" href="/signin">Sign In</a>
+                    <a
+                        class="text-sm p-1.5 rounded-lg bg-slate-500"
+                        href="/signin">Sign In</a
+                    >
                 {/if}
             </svelte:fragment>
         </AppBar>
