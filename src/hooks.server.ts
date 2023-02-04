@@ -9,12 +9,10 @@ import {
 export const handle = SvelteKitAuth({
 	callbacks: {
 		async jwt({ token, account }) {
-			// TODO: fix checking in server thing ...
-			if (Number(token.created) + 24 * 60 * 60 * 1000 < Date.now()) return null; // logout if session was made 24 hours ago
-			
-			if (account) {
+			if (account || Number(token.created) + 60 * 60 * 1000 < Date.now()) {
 				token.created = Date.now();
 				token.accessToken = account?.access_token ?? token.accessToken;
+				token.id = account?.providerAccountId ?? token.id;
 				const resp = await fetch("https://discord.com/api/users/@me/guilds", {
 					headers: {
 						Authorization: `Bearer ${token.accessToken}`,
@@ -22,10 +20,12 @@ export const handle = SvelteKitAuth({
 					},
 				}).then((r) => r.json());
 
-				token.id = account?.providerAccountId ?? token.id;
-				token.inServer = !!resp.find(
-					(server: { id: string }) => server.id === DISCORD_SERVER_ID,
-				);
+				if (
+					!resp.find(
+						(server: { id: string }) => server.id === DISCORD_SERVER_ID,
+					)
+				)
+					return null;
 			}
 			return token;
 		},
@@ -36,7 +36,6 @@ export const handle = SvelteKitAuth({
 					name: session.user?.name,
 					image: session.user?.image,
 					id: token.id,
-					inServer: token.inServer,
 				},
 			};
 		},

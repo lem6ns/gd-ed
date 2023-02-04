@@ -4,7 +4,6 @@
     import "../app.postcss";
     import { AppShell, AppBar } from "@skeletonlabs/skeleton";
     import { page } from "$app/stores";
-    import { onMount } from "svelte";
     import { signOut } from "@auth/sveltekit/client";
     import { PUBLIC_INSTANCE_NAME } from "$env/static/public";
     import { Folder, ArrowLeftOnRectangle, Cog } from "@steeze-ui/heroicons";
@@ -23,11 +22,6 @@
             icon: Cog,
         },
     ];
-
-    onMount(() => {
-        if ($page.data.session && !$page.data.session?.user?.inServer)
-            return signOut();
-    });
 </script>
 
 <svelte:head>

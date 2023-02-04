@@ -3,7 +3,6 @@ import type { LayoutServerLoad } from "./$types";
 
 export const load: LayoutServerLoad = async (event) => {
 	const session = await event.locals.getSession();
-	if (event.url.pathname.startsWith("/signin")) return { session };
-	if (!session?.user?.inServer) throw redirect(303, "/signin");
+	if (!session && event.url.pathname !== "/signin") throw redirect(303, "/signin")
 	return { session };
 };
