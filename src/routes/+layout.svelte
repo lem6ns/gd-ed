@@ -14,7 +14,7 @@
     const tiles = [
         {
             name: "Files",
-            href: "/",
+            href: "/files",
             icon: Folder,
         },
         {
@@ -51,7 +51,7 @@
             <svelte:fragment slot="trail">
                 {#if $page.data.session}
                     {#each tiles as tile}
-                        <div class="block lg:hidden">
+                        <div on:click={() => goto(tile.href)} class="block lg:hidden p-2 -mx-3 {$page.url.pathname.startsWith(tile.href) ? "bg-surface-900" : ""}">
                             <Icon
                                 src={tile.icon}
                                 theme="solid"
@@ -76,7 +76,7 @@
         {#if $page.data.session}
             {#each tiles as tile, i}
                 <div
-                    class="w-full cursor-pointer p-4 {i % 2 ? "bg-surface-900/60" : ""}"
+                    class="w-full cursor-pointer p-4 {$page.url.pathname.startsWith(tile.href) ? "bg-surface-900/60" : ""}"
                     on:click={() => goto(tile.href)}
                 >
                     <Icon
