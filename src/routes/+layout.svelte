@@ -45,7 +45,7 @@
         <!-- App Bar -->
         <AppBar>
             <svelte:fragment slot="lead">
-                <strong class="text-xl uppercase">{PUBLIC_INSTANCE_NAME}</strong
+                <strong class="text-xl">{PUBLIC_INSTANCE_NAME}</strong
                 >
             </svelte:fragment>
             <svelte:fragment slot="trail">
