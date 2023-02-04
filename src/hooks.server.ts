@@ -9,7 +9,7 @@ import {
 export const handle = SvelteKitAuth({
 	callbacks: {
 		async jwt({ token, account }) {
-			if (account || Number(token.lastCheck) + 60 * 1000 < Date.now()) {
+			if (account || Number(token.lastCheck) + 60 * 60 * 1000 < Date.now()) {
 				token.accessToken = account?.access_token ?? token.accessToken;
 				token.lastCheck = Date.now();
 				const resp = await fetch("https://discord.com/api/users/@me/guilds", {

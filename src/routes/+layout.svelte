@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
     import "@skeletonlabs/skeleton/themes/theme-rocket.css";
     import "@skeletonlabs/skeleton/styles/all.css";
     import "../app.postcss";
@@ -7,6 +7,22 @@
     import { onMount } from "svelte";
     import { signOut } from "@auth/sveltekit/client";
     import { PUBLIC_INSTANCE_NAME } from "$env/static/public";
+    import { Folder, ArrowLeftOnRectangle, Cog } from "@steeze-ui/heroicons";
+    import { Icon } from "@steeze-ui/svelte-icon";
+    import { goto } from "$app/navigation";
+
+    const tiles = [
+        {
+            name: "Files",
+            href: "/",
+            icon: Folder,
+        },
+        {
+            name: "Settings",
+            href: "/settings",
+            icon: Cog,
+        },
+    ];
 
     onMount(() => {
         if ($page.data.session && !$page.data.session?.user?.inServer)
@@ -19,25 +35,59 @@
 </svelte:head>
 
 <!-- App Shell -->
-<AppShell slotSidebarLeft="bg-surface-500/5 w-56 p-4">
+<!-- svelte-ignore a11y-click-events-have-key-events -->
+<AppShell
+    slotSidebarLeft={$page.data.session
+        ? "bg-surface-800 w-56 border-r-4 border-surface-900 hidden lg:block"
+        : ""}
+>
     <svelte:fragment slot="header">
         <!-- App Bar -->
         <AppBar>
             <svelte:fragment slot="lead">
-                <strong class="text-xl uppercase">{PUBLIC_INSTANCE_NAME}</strong>
+                <strong class="text-xl uppercase">{PUBLIC_INSTANCE_NAME}</strong
+                >
             </svelte:fragment>
             <svelte:fragment slot="trail">
                 {#if $page.data.session}
+                    {#each tiles as tile}
+                        <div class="block lg:hidden">
+                            <Icon
+                                src={tile.icon}
+                                theme="solid"
+                                class="w-8 inline-block"
+                            />
+                        </div>
+                    {/each}
                     {#if $page.data.session.user?.image}
-                        <img
-                            class="h-8 w-8 rounded-full"
-                            alt="Profile"
-                            src={$page.data.session.user.image}
-                        />
+                        <div on:click={() => signOut()}>
+                            <Icon
+                                src={ArrowLeftOnRectangle}
+                                theme="solid"
+                                class="w-8 inline-block text-red-400 cursor-pointer"
+                            />
+                        </div>
                     {/if}
                 {/if}
             </svelte:fragment>
         </AppBar>
+    </svelte:fragment>
+    <svelte:fragment slot="sidebarLeft">
+        {#if $page.data.session}
+            {#each tiles as tile}
+                <div
+                    class="w-full cursor-pointer border-b-4 p-3 border-solid border-surface-900"
+                    on:click={() => goto(tile.href)}
+                >
+                    <Icon
+                        src={tile.icon}
+                        theme="solid"
+                        class="w-8 inline-block"
+                    />
+                    <span class="text-xl absolute mt-0.5 ml-1">{tile.name}</span>
+                </div>
+            {/each}
+        {/if}
     </svelte:fragment>
     <!-- Page Route Content -->
     <slot />

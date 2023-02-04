@@ -1,21 +1,23 @@
 <script>
-	import { signOut } from "@auth/sveltekit/client";
 	import { page } from "$app/stores";
+	import { AppBar } from "@skeletonlabs/skeleton";
+	import { Icon } from "@steeze-ui/svelte-icon";
+	import { Folder } from "@steeze-ui/heroicons";
 </script>
 
-<h1>SvelteKit Auth Example</h1>
-<p>
-	{#if $page.data.session}
-		{#if $page.data.session.user?.image}
-			<span
-				style="background-image: url('{$page.data.session.user.image}')"
-				class="avatar"
-			/>
-		{/if}
-		<span class="signedInText">
-			<small>Signed in as</small><br />
-			<strong>{$page.data.session.user?.name ?? "User"}</strong>
-		</span>
-		<button on:click={() => signOut()} class="button">Sign out</button>
-	{/if}
-</p>
+<div class="h-full w-full flex justify-center items-center">
+	<div class="h-full w-full bg-surface-700 rounded-lg">
+		<AppBar>
+			<svelte:fragment slot="lead">
+				<span class="text-lg"> Files </span>
+			</svelte:fragment>
+		</AppBar>
+
+		<div class="flex">
+			<div class="w-full p-4 border-b-4 border-surface-800">
+				<Icon src={Folder} theme="solid" class="w-8 inline-block text-amber-200" />
+				<span class="mt-1 ml-1.5 absolute">Folder</span>
+			</div>
+		</div>
+	</div>
+</div>

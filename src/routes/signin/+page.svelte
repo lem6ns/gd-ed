@@ -2,9 +2,9 @@
     import { signIn } from "@auth/sveltekit/client";
 </script>
 
-<div class="h-full w-full flex justify-center items-center bg-gray-800">
+<div class="h-full w-full flex justify-center items-center bg-surface-800">
     <div
-        class="w-1/3 h-1/6 lg:h-48 bg-gray-900 text-center flex justify-center items-center rounded-2xl"
+        class="w-1/3 h-1/6 lg:h-48 bg-surface-900 text-center flex justify-center items-center rounded-2xl"
     >
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <div
