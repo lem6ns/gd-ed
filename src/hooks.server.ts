@@ -9,9 +9,12 @@ import {
 export const handle = SvelteKitAuth({
 	callbacks: {
 		async jwt({ token, account }) {
-			if (account || Number(token.lastCheck) + 60 * 60 * 1000 < Date.now()) {
+			// TODO: fix checking in server thing ...
+			if (Number(token.created) + 24 * 60 * 60 * 1000 < Date.now()) return null; // logout if session was made 24 hours ago
+			
+			if (account) {
+				token.created = Date.now();
 				token.accessToken = account?.access_token ?? token.accessToken;
-				token.lastCheck = Date.now();
 				const resp = await fetch("https://discord.com/api/users/@me/guilds", {
 					headers: {
 						Authorization: `Bearer ${token.accessToken}`,
