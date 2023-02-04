@@ -36,10 +36,8 @@
         bind:value={$dataTableStore.search}
         type="search"
         placeholder="Search..."
+        class="!rounded-none mb-3.5"
     />
-
-    <br />
-    <br />
 
     <div class="table-container !rounded-none">
         <table
@@ -55,7 +53,7 @@
                 on:keypress
             >
                 <th
-                    class="bg-surface-800 border-x-2 border-surface-900/50 table-cell-fit"
+                    class="bg-surface-800 table-cell-fit"
                 >
                     <input
                         type="checkbox"
@@ -67,27 +65,27 @@
 
                 <th
                     data-sort="name"
-                    class="bg-surface-800 border-2 border-surface-900/50"
+                    class="bg-surface-800"
                 >
                     Name
                 </th>
 
                 <th
                     data-sort="dateModified"
-                    class="bg-surface-800 border-2 border-surface-900/50 table-cell-fit"
+                    class="bg-surface-800 table-cell-fit"
                 >
                     Date Modified
                 </th>
 
                 <th
                     data-sort="size"
-                    class="bg-surface-800 border-2 border-surface-900/50 table-cell-fit"
+                    class="bg-surface-800 table-cell-fit"
                 >
                     Size
                 </th>
 
                 <th
-                    class="bg-surface-800 border-2 border-surface-900/50 table-cell-fit"
+                    class="bg-surface-800 table-cell-fit"
                 >
                     Actions
                 </th>
@@ -99,13 +97,17 @@
                         class:table-row-checked={row.dataTableChecked}
                         aria-rowindex={rowIndex + 1}
                     >
-                        <td class="border-x-2 border-surface-900/50" role="gridcell" aria-colindex={1} tabindex="0">
+                        <td
+                            role="gridcell"
+                            aria-colindex={1}
+                            tabindex="0"
+                        >
                             <input
                                 type="checkbox"
                                 bind:checked={row.dataTableChecked}
                             />
                         </td>
-                        <td class="border-2 border-surface-900/50" role="gridcell" aria-colindex={2} tabindex="0">
+                        <td role="gridcell" aria-colindex={2} tabindex="0">
                             <Icon
                                 src={row.type === "folder" ? Folder : Document}
                                 theme="solid"
@@ -113,13 +115,13 @@
                             />
                             {row.name}
                         </td>
-                        <td class="border-2 border-surface-900/50" role="gridcell" aria-colindex={3} tabindex="0">
+                        <td role="gridcell" aria-colindex={3} tabindex="0">
                             {row.dateModified}
                         </td>
-                        <td class="border-2 border-surface-900/50" role="gridcell" aria-colindex={4} tabindex="0">
+                        <td role="gridcell" aria-colindex={4} tabindex="0">
                             {row.size}
                         </td>
-                        <td class="border-2 border-surface-900/50" role="gridcell" aria-colindex={5} tabindex="0">
+                        <td role="gridcell" aria-colindex={5} tabindex="0">
                             <Icon
                                 src={UserPlus}
                                 theme="solid"
