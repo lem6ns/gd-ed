@@ -12,7 +12,7 @@
             on:click={() => signIn("discord")}
         >
             <svg
-                class="w-1/2 md:w-1/6 lg:w-1/4 lg:pr-8"
+                class="w-1/2 md:w-1/6 lg:w-[22%] lg:pr-8"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 127.14 96.36"
                 ><defs

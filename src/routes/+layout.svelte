@@ -1,5 +1,5 @@
 <script lang="ts">
-    import "@skeletonlabs/skeleton/themes/theme-rocket.css";
+    import "@skeletonlabs/skeleton/themes/theme-crimson.css";
     import "@skeletonlabs/skeleton/styles/all.css";
     import "../app.postcss";
     import { AppShell, AppBar } from "@skeletonlabs/skeleton";
@@ -38,7 +38,7 @@
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <AppShell
     slotSidebarLeft={$page.data.session
-        ? "bg-surface-800 w-56 border-r-4 border-surface-900 hidden lg:block"
+        ? "bg-surface-800 w-56 border-r-4 border-surface-900/50 hidden lg:block"
         : ""}
 >
     <svelte:fragment slot="header">
@@ -74,9 +74,9 @@
     </svelte:fragment>
     <svelte:fragment slot="sidebarLeft">
         {#if $page.data.session}
-            {#each tiles as tile}
+            {#each tiles as tile, i}
                 <div
-                    class="w-full cursor-pointer border-b-4 p-3 border-solid border-surface-900"
+                    class="w-full cursor-pointer p-4 {i % 2 ? "bg-surface-900/60" : ""}"
                     on:click={() => goto(tile.href)}
                 >
                     <Icon
@@ -84,7 +84,7 @@
                         theme="solid"
                         class="w-8 inline-block"
                     />
-                    <span class="text-xl absolute mt-0.5 ml-1">{tile.name}</span>
+                    <span class="text-xl absolute mt-0.5 ml-3">{tile.name}</span>
                 </div>
             {/each}
         {/if}

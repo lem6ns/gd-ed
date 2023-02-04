@@ -1,23 +1,248 @@
-<script>
+<script lang="ts">
 	import { page } from "$app/stores";
+	import TableView from "$lib/components/TableView.svelte";
 	import { AppBar } from "@skeletonlabs/skeleton";
-	import { Icon } from "@steeze-ui/svelte-icon";
-	import { Folder } from "@steeze-ui/heroicons";
+
+	const items = [
+		{
+			type: "folder",
+			name: "totally not porn (it isn't porn)",
+			dateModified: new Date().toUTCString(),
+			size: null,
+		},
+		{
+			type: "file",
+			name: "gaming.png",
+			dateModified: new Date().toUTCString(),
+			size: 1000,
+		},
+		{
+			type: "folder",
+			name: "totally not porn (it isn't porn)",
+			dateModified: new Date().toUTCString(),
+			size: null,
+		},
+		{
+			type: "file",
+			name: "gaming.png",
+			dateModified: new Date().toUTCString(),
+			size: 1000,
+		},
+		{
+			type: "folder",
+			name: "totally not porn (it isn't porn)",
+			dateModified: new Date().toUTCString(),
+			size: null,
+		},
+		{
+			type: "file",
+			name: "gaming.png",
+			dateModified: new Date().toUTCString(),
+			size: 1000,
+		},
+		{
+			type: "folder",
+			name: "totally not porn (it isn't porn)",
+			dateModified: new Date().toUTCString(),
+			size: null,
+		},
+		{
+			type: "file",
+			name: "gaming.png",
+			dateModified: new Date().toUTCString(),
+			size: 1000,
+		},
+		{
+			type: "folder",
+			name: "totally not porn (it isn't porn)",
+			dateModified: new Date().toUTCString(),
+			size: null,
+		},
+		{
+			type: "file",
+			name: "gaming.png",
+			dateModified: new Date().toUTCString(),
+			size: 1000,
+		},
+		{
+			type: "folder",
+			name: "totally not porn (it isn't porn)",
+			dateModified: new Date().toUTCString(),
+			size: null,
+		},
+		{
+			type: "file",
+			name: "gaming.png",
+			dateModified: new Date().toUTCString(),
+			size: 1000,
+		},
+		{
+			type: "folder",
+			name: "totally not porn (it isn't porn)",
+			dateModified: new Date().toUTCString(),
+			size: null,
+		},
+		{
+			type: "file",
+			name: "gaming.png",
+			dateModified: new Date().toUTCString(),
+			size: 1000,
+		},
+		{
+			type: "folder",
+			name: "totally not porn (it isn't porn)",
+			dateModified: new Date().toUTCString(),
+			size: null,
+		},
+		{
+			type: "file",
+			name: "gaming.png",
+			dateModified: new Date().toUTCString(),
+			size: 1000,
+		},
+		{
+			type: "folder",
+			name: "totally not porn (it isn't porn)",
+			dateModified: new Date().toUTCString(),
+			size: null,
+		},
+		{
+			type: "file",
+			name: "gaming.png",
+			dateModified: new Date().toUTCString(),
+			size: 1000,
+		},
+		{
+			type: "folder",
+			name: "totally not porn (it isn't porn)",
+			dateModified: new Date().toUTCString(),
+			size: null,
+		},
+		{
+			type: "file",
+			name: "gaming.png",
+			dateModified: new Date().toUTCString(),
+			size: 1000,
+		},
+		{
+			type: "folder",
+			name: "totally not porn (it isn't porn)",
+			dateModified: new Date().toUTCString(),
+			size: null,
+		},
+		{
+			type: "file",
+			name: "gaming.png",
+			dateModified: new Date().toUTCString(),
+			size: 1000,
+		},
+		{
+			type: "folder",
+			name: "totally not porn (it isn't porn)",
+			dateModified: new Date().toUTCString(),
+			size: null,
+		},
+		{
+			type: "file",
+			name: "gaming.png",
+			dateModified: new Date().toUTCString(),
+			size: 1000,
+		},
+		{
+			type: "folder",
+			name: "totally not porn (it isn't porn)",
+			dateModified: new Date().toUTCString(),
+			size: null,
+		},
+		{
+			type: "file",
+			name: "gaming.png",
+			dateModified: new Date().toUTCString(),
+			size: 1000,
+		},
+		{
+			type: "folder",
+			name: "totally not porn (it isn't porn)",
+			dateModified: new Date().toUTCString(),
+			size: null,
+		},
+		{
+			type: "file",
+			name: "gaming.png",
+			dateModified: new Date().toUTCString(),
+			size: 1000,
+		},
+		{
+			type: "folder",
+			name: "totally not porn (it isn't porn)",
+			dateModified: new Date().toUTCString(),
+			size: null,
+		},
+		{
+			type: "file",
+			name: "gaming.png",
+			dateModified: new Date().toUTCString(),
+			size: 1000,
+		},
+		{
+			type: "folder",
+			name: "totally not porn (it isn't porn)",
+			dateModified: new Date().toUTCString(),
+			size: null,
+		},
+		{
+			type: "file",
+			name: "gaming.png",
+			dateModified: new Date().toUTCString(),
+			size: 1000,
+		},
+		{
+			type: "folder",
+			name: "totally not porn (it isn't porn)",
+			dateModified: new Date().toUTCString(),
+			size: null,
+		},
+		{
+			type: "file",
+			name: "gaming.png",
+			dateModified: new Date().toUTCString(),
+			size: 1000,
+		},
+		{
+			type: "folder",
+			name: "totally not porn (it isn't porn)",
+			dateModified: new Date().toUTCString(),
+			size: null,
+		},
+		{
+			type: "file",
+			name: "gaming.png",
+			dateModified: new Date().toUTCString(),
+			size: 1000,
+		},
+		{
+			type: "folder",
+			name: "totally not porn (it isn't porn)",
+			dateModified: new Date().toUTCString(),
+			size: null,
+		},
+		{
+			type: "file",
+			name: "gaming.png",
+			dateModified: new Date().toUTCString(),
+			size: 1000,
+		},
+	];
 </script>
 
 <div class="h-full w-full flex justify-center items-center">
 	<div class="h-full w-full bg-surface-700 rounded-lg">
 		<AppBar>
 			<svelte:fragment slot="lead">
-				<span class="text-lg"> Files </span>
+				<span class="text-lg">Files</span>
 			</svelte:fragment>
 		</AppBar>
 
-		<div class="flex">
-			<div class="w-full p-4 border-b-4 border-surface-800">
-				<Icon src={Folder} theme="solid" class="w-8 inline-block text-amber-200" />
-				<span class="mt-1 ml-1.5 absolute">Folder</span>
-			</div>
-		</div>
+		<TableView {items} />
 	</div>
 </div>
