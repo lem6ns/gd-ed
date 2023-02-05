@@ -11,7 +11,7 @@ export const GET = (async ({ params, locals, setHeaders }) => {
 		"content-type": "application/json",
 	});
 	const userId = (await locals.getSession())?.user?.id;
-	const path = params.path.trim().replace(/^\/|\/$/g, '') ?? "";
+	const path = params.path.trim().replace(/^\/|\/$/g, "") ?? "";
 
 	if (!userId) {
 		return new Response(

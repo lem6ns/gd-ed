@@ -7,7 +7,7 @@ export const load: LayoutServerLoad = async (event) => {
 	} catch (e) {
 		throw error(400, "Rclone Remote Control not accessible. Is it started?");
 	}
-	
+
 	const session = await event.locals.getSession();
 	if (!session && event.url.pathname !== "/signin")
 		throw redirect(303, "/signin");

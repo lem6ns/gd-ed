@@ -16,7 +16,8 @@ export const GET = (async ({ url, params, locals, setHeaders }) => {
 		.slice(0, -1)
 		.join("/")}/${url.searchParams
 		.get("newPath")
-		.trim().replace(/^\/|\/$/g, "")}`;
+		.trim()
+		.replace(/^\/|\/$/g, "")}`;
 
 	if (!userId) {
 		return new Response(

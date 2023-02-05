@@ -38,13 +38,6 @@
 
     dataTableStore.subscribe((model) => dataTableHandler(model));
 
-    const navigate = (type: string, path: string) => {
-        if (type == "back")
-            return goto($page.url.pathname.split("/").slice(0, -1).join("/"));
-        if (type == "folder") return goto(`/files/${path}`);
-        if (type == "file") return goto(`/api/files/get/${path}`); // temp
-    };
-
     const formatBytes = (bytes: number, decimals = 2): string => {
         if (!+bytes) return "0 Bytes";
 
@@ -57,6 +50,13 @@
         return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${
             sizes[i]
         }`;
+    };
+
+    const navigate = (type: string, path: string) => {
+        if (type == "back")
+            return goto($page.url.pathname.split("/").slice(0, -1).join("/"));
+        if (type == "folder") return goto(`/files/${path}`);
+        if (type == "file") return goto(`/api/files/get/${path}`); // temp
     };
 
     const rename = async (type: string, oldPath: string) => {
@@ -134,8 +134,8 @@
     <div class="table-container !rounded-none">
         <table
             class="table table-hover !rounded-none"
-            use:tableInteraction
             role="grid"
+            use:tableInteraction
             use:tableA11y
         >
             <thead
@@ -216,6 +216,7 @@
                                     bind:checked={row.dataTableChecked}
                                 />
                             </td>
+
                             <td
                                 role="gridcell"
                                 aria-colindex={2}
@@ -239,6 +240,7 @@
                                     />
                                 {/if}
                             </td>
+
                             <td
                                 role="gridcell"
                                 aria-colindex={3}
@@ -248,12 +250,15 @@
                             >
                                 {row.name}
                             </td>
+
                             <td role="gridcell" aria-colindex={4} tabindex="0">
                                 {row.dateModified}
                             </td>
+
                             <td role="gridcell" aria-colindex={5} tabindex="0">
                                 {row.size ? formatBytes(row.size) : ""}
                             </td>
+
                             <td role="gridcell" aria-colindex={6} tabindex="0">
                                 {#if row.type !== "back"}
                                     <Icon

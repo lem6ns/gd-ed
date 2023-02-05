@@ -10,7 +10,7 @@ export const GET = (async ({ params, locals, setHeaders }) => {
 		"content-type": "application/json",
 	});
 	const userId = (await locals.getSession())?.user?.id;
-	const folderPath = params.folderPath.trim().replace(/^\/|\/$/g, '') ?? "";
+	const folderPath = params.folderPath.trim().replace(/^\/|\/$/g, "") ?? "";
 
 	if (!userId) {
 		return new Response(
