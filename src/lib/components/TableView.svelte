@@ -14,6 +14,8 @@
         dataTableHandler,
         tableInteraction,
         tableA11y,
+        modalStore,
+        type ModalSettings,
     } from "@skeletonlabs/skeleton";
     import { goto } from "$app/navigation";
 
@@ -55,6 +57,48 @@
         return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${
             sizes[i]
         }`;
+    };
+
+    const rename = async (type: string, oldPath: string) => {
+        const prompt: ModalSettings = {
+            type: "prompt",
+            title: `Rename ${oldPath.split('\\').pop()?.split('/').pop()}`,
+            body: `Enter the new name for "${oldPath.split('\\').pop()?.split('/').pop()}".`,
+            // Populates the initial input value
+            value: type === "file" ? `.${oldPath.split(".").pop()}` : "",
+            // Returns the updated response value
+            response: async (r: string) => {
+                if (!r) return;
+                const success = !(
+                    await fetch(
+                        `/api/files/${
+                            type === "file" ? "renameFile" : "renameFolder"
+                        }/${oldPath}?newPath=${r}`
+                    ).then((r) => r.json())
+                ).error;
+                if (success) {
+                    $items = (
+                        await fetch(
+                            `/api/files/list/${$page.params.path}`
+                        ).then((r) => r.json())
+                    ).data;
+                }
+            },
+            // Optionally override the button text
+            buttonTextCancel: "Cancel",
+            buttonTextSubmit: "Rename",
+        };
+        modalStore.trigger(prompt);
+    };
+
+    const renameSelected = () => {
+        const selected = $dataTableStore.selection.filter(
+            (selected) => selected.type !== "back"
+        );
+
+        selected.forEach((row) => {
+            rename(row.type, row.path);
+        });
     };
 
     const remove = async (type: string, path: string) => {
@@ -128,11 +172,17 @@
                         theme="solid"
                         class="mx-2 w-6 inline-block"
                     />
+                    <!-- svelte-ignore a11y-click-events-have-key-events -->
+                    <span
+                        class="cursor-pointer"
+                        on:click={() => renameSelected()}
+                    >
                     <Icon
                         src={PencilSquare}
                         theme="solid"
                         class="mx-2 w-6 inline-block"
                     />
+                </span>
                     <!-- svelte-ignore a11y-click-events-have-key-events -->
                     <span
                         class="cursor-pointer"
@@ -207,11 +257,18 @@
                                         theme="solid"
                                         class="mx-2 w-6 inline-block"
                                     />
-                                    <Icon
-                                        src={PencilSquare}
-                                        theme="solid"
-                                        class="mx-2 w-6 inline-block"
-                                    />
+                                    <!-- svelte-ignore a11y-click-events-have-key-events -->
+                                    <span
+                                        on:click={() =>
+                                            rename(row.type, row.path)}
+                                        class="cursor-pointer"
+                                    >
+                                        <Icon
+                                            src={PencilSquare}
+                                            theme="solid"
+                                            class="mx-2 w-6 inline-block"
+                                        />
+                                    </span>
                                     <!-- svelte-ignore a11y-click-events-have-key-events -->
                                     <span
                                         on:click={() =>

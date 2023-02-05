@@ -44,7 +44,7 @@ export const GET = (async ({ params, locals, setHeaders }) => {
 		}),
 	}).then((r) => r.json());
 
-	if (remove.error && path !== "") {
+	if (remove.error) {
 		return new Response(
 			JSON.stringify({
 				error: true,

@@ -5,12 +5,19 @@ import {
 } from "$env/static/private";
 import type { RequestHandler } from "../$types";
 
-export const GET = (async ({ params, locals, setHeaders }) => {
+export const GET = (async ({ url, params, locals, setHeaders }) => {
 	setHeaders({
 		"content-type": "application/json",
 	});
 	const userId = (await locals.getSession())?.user?.id;
-	const path = params.path.trim().replace(/^\/|\/$/g, '') ?? "";
+	const oldPath = params.path.trim().replace(/^\/|\/$/g, "") ?? "";
+	const newPath = `${oldPath
+		.split("/")
+		.slice(0, -1)
+		.join("/")}${url.searchParams
+		.get("newPath")
+		.trim()
+		.replace(/^\/|\/$/g, "")}`;
 
 	if (!userId) {
 		return new Response(
@@ -21,7 +28,7 @@ export const GET = (async ({ params, locals, setHeaders }) => {
 		);
 	}
 
-	if (!path) {
+	if (!(oldPath && newPath)) {
 		return new Response(
 			JSON.stringify({
 				error: true,
@@ -30,7 +37,7 @@ export const GET = (async ({ params, locals, setHeaders }) => {
 		);
 	}
 
-	let purge = await fetch("http://127.0.0.1:5572/operations/purge", {
+	let rename = await fetch("http://127.0.0.1:5572/sync/move", {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",
@@ -39,16 +46,22 @@ export const GET = (async ({ params, locals, setHeaders }) => {
 			).toString("base64")}`,
 		},
 		body: JSON.stringify({
-			fs: `${RCLONE_CRYPT_REMOTE_NAME}:`,
-			remote: `${userId}${path ? `/${path}` : ""}`,
+			srcFs: `${RCLONE_CRYPT_REMOTE_NAME}:${userId}${
+				oldPath ? `/${oldPath}` : ""
+			}`,
+			dstFs: `${RCLONE_CRYPT_REMOTE_NAME}:${userId}${
+				newPath ? `/${newPath}` : ""
+			}`,
+			createEmptySrcDirs: true,
+			deleteEmptySrcDirs: true,
 		}),
 	}).then((r) => r.json());
 
-	if (purge.error) {
+	if (rename.error) {
 		return new Response(
 			JSON.stringify({
 				error: true,
-				data: purge.error,
+				data: rename.error,
 			}),
 		);
 	}
@@ -56,7 +69,7 @@ export const GET = (async ({ params, locals, setHeaders }) => {
 	return new Response(
 		JSON.stringify({
 			error: false,
-			data: "purged successfully",
+			data: "Renamed successfully",
 		}),
 	);
 }) satisfies RequestHandler;
