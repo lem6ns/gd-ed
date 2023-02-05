@@ -62,8 +62,12 @@
     const rename = async (type: string, oldPath: string) => {
         const prompt: ModalSettings = {
             type: "prompt",
-            title: `Rename ${oldPath.split('\\').pop()?.split('/').pop()}`,
-            body: `Enter the new name for "${oldPath.split('\\').pop()?.split('/').pop()}".`,
+            title: `Rename ${oldPath.split("\\").pop()?.split("/").pop()}`,
+            body: `Enter the new name for "${oldPath
+                .split("\\")
+                .pop()
+                ?.split("/")
+                .pop()}".`,
             // Populates the initial input value
             value: type === "file" ? `.${oldPath.split(".").pop()}` : "",
             // Returns the updated response value
@@ -177,12 +181,12 @@
                         class="cursor-pointer"
                         on:click={() => renameSelected()}
                     >
-                    <Icon
-                        src={PencilSquare}
-                        theme="solid"
-                        class="mx-2 w-6 inline-block"
-                    />
-                </span>
+                        <Icon
+                            src={PencilSquare}
+                            theme="solid"
+                            class="mx-2 w-6 inline-block"
+                        />
+                    </span>
                     <!-- svelte-ignore a11y-click-events-have-key-events -->
                     <span
                         class="cursor-pointer"

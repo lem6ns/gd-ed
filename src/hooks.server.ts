@@ -20,12 +20,16 @@ export const handle = SvelteKitAuth({
 					},
 				}).then((r) => r.json());
 
-				if (
-					!resp?.find(
-						(server: { id: string }) => server.id === DISCORD_SERVER_ID,
+				try {
+					if (
+						!resp.find(
+							(server: { id: string }) => server.id === DISCORD_SERVER_ID,
+						)
 					)
-				)
+						return null;
+				} catch {
 					return null;
+				}
 			}
 			return token;
 		},
