@@ -10,7 +10,7 @@ export const GET = (async ({ params, locals, setHeaders }) => {
 		"content-type": "application/json",
 	});
 	const userId = (await locals.getSession())?.user?.id;
-	const path = params.path ?? "";
+	const path = params.path.trim() ?? "";
 
 	if (!userId) {
 		return new Response(
@@ -44,7 +44,6 @@ export const GET = (async ({ params, locals, setHeaders }) => {
 		}),
 	}).then((r) => r.json());
 
-	console.log(remove)
 	if (remove.error && path !== "") {
 		return new Response(
 			JSON.stringify({

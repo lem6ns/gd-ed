@@ -63,6 +63,16 @@
         ).then((r) => r.json());
         $items = $items.filter((item: { path: string }) => item.path !== path);
     };
+
+    const removeSelected = () => {
+        const selected = $dataTableStore.selection.filter(
+            (selected) => selected.type !== "back"
+        );
+
+        selected.forEach((row) => {
+            remove(row.type, row.path);
+        });
+    };
 </script>
 
 <div class="p-4">
@@ -123,11 +133,17 @@
                         theme="solid"
                         class="mx-2 w-6 inline-block"
                     />
-                    <Icon
-                        src={Trash}
-                        theme="solid"
-                        class="mx-2 w-6 inline-block"
-                    />
+                    <!-- svelte-ignore a11y-click-events-have-key-events -->
+                    <span
+                        class="cursor-pointer"
+                        on:click={() => removeSelected()}
+                    >
+                        <Icon
+                            src={Trash}
+                            theme="solid"
+                            class="mx-2 w-6 inline-block"
+                        />
+                    </span>
                 </th>
             </thead>
 

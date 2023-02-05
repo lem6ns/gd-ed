@@ -10,7 +10,7 @@ export const GET = (async ({ params, locals, setHeaders }) => {
 		"content-type": "application/json",
 	});
 	const userId = (await locals.getSession())?.user?.id;
-	const folderPath = params.folderPath ?? "";
+	const folderPath = params.folderPath.trim() ?? "";
 
 	if (!userId) {
 		return new Response(
@@ -44,7 +44,6 @@ export const GET = (async ({ params, locals, setHeaders }) => {
 		}),
 	}).then((r) => r.json());
 
-	console.log(mkdir)
 	if (mkdir.error && folderPath !== "") {
 		return new Response(
 			JSON.stringify({

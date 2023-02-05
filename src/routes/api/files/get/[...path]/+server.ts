@@ -8,7 +8,7 @@ import type { RequestHandler } from "../[file]/$types";
 
 export const GET = (async ({ params, locals, setHeaders }) => {
 	const userId = (await locals.getSession())?.user?.id;
-	const { path } = params;
+	const path = params.path.trim() ?? "";
 
 	if (!userId) {
 		return new Response(
