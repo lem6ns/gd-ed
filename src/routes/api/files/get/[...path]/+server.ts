@@ -37,8 +37,6 @@ export const GET = (async ({ params, locals, setHeaders }) => {
 		error = Boolean((await fileResp.clone().json()).error);
 	} catch {}
 
-	const file = await fileResp.blob();
-
 	if (error) {
 		setHeaders({
 			"content-type": "application/json",
@@ -50,5 +48,5 @@ export const GET = (async ({ params, locals, setHeaders }) => {
 			}),
 		);
 	}
-	return new Response(file);
+	return fileResp;
 }) satisfies RequestHandler;
