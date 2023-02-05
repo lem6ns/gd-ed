@@ -2,7 +2,7 @@
     import "@skeletonlabs/skeleton/themes/theme-crimson.css";
     import "@skeletonlabs/skeleton/styles/all.css";
     import "../app.postcss";
-    import { AppShell, AppBar } from "@skeletonlabs/skeleton";
+    import { AppShell, AppBar, Modal, Toast } from "@skeletonlabs/skeleton";
     import { page } from "$app/stores";
     import { signOut } from "@auth/sveltekit/client";
     import { PUBLIC_INSTANCE_NAME } from "$env/static/public";
@@ -27,6 +27,10 @@
 <svelte:head>
     <title>{PUBLIC_INSTANCE_NAME}</title>
 </svelte:head>
+
+<Toast />
+
+<Modal />
 
 <!-- App Shell -->
 <!-- svelte-ignore a11y-click-events-have-key-events -->

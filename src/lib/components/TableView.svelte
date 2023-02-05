@@ -5,9 +5,9 @@
         Document,
         Folder,
         UserPlus,
-        ArrowRightOnRectangle,
         Trash,
         ArrowUpLeft,
+        PencilSquare,
     } from "@steeze-ui/heroicons";
     import {
         createDataTableStore,
@@ -17,9 +17,8 @@
     } from "@skeletonlabs/skeleton";
     import { goto } from "$app/navigation";
 
-    export let items: Record<string, any>[];
+    export let items: any;
     const dataTableStore = createDataTableStore(
-        // Pass your source data here:
         [
             {
                 type: "back",
@@ -27,18 +26,14 @@
                 dateModified: "",
                 size: "",
             },
-            ...items,
+            ...$items,
         ],
-        // Provide optional settings:
         {
-            // The current search term.
             search: "",
-            // The current sort key.
             sort: "",
         }
     );
 
-    // This automatically handles search, sort, etc when the model updates.
     dataTableStore.subscribe((model) => dataTableHandler(model));
 
     const navigate = (type: string, path: string) => {
@@ -46,6 +41,27 @@
             return goto($page.url.pathname.split("/").slice(0, -1).join("/"));
         if (type == "folder") return goto(`/files/${path}`);
         if (type == "file") return goto(`/api/files/get/${path}`); // temp
+    };
+
+    const formatBytes = (bytes: number, decimals = 2): string => {
+        if (!+bytes) return "0 Bytes";
+
+        const k = 1024;
+        const dm = decimals < 0 ? 0 : decimals;
+        const sizes = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
+
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+
+        return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${
+            sizes[i]
+        }`;
+    };
+
+    const remove = async (type: string, path: string) => {
+        await fetch(
+            `/api/files/${type === "file" ? "delete" : "purge"}/${path}`
+        ).then((r) => r.json());
+        $items = $items.filter((item: { path: string }) => item.path !== path);
     };
 </script>
 
@@ -79,6 +95,10 @@
                     />
                 </th>
 
+                <th data-sort="type" class="bg-surface-800 table-cell-fit">
+                    Type
+                </th>
+
                 <th data-sort="name" class="bg-surface-800"> Name </th>
 
                 <th
@@ -99,7 +119,7 @@
                         class="mx-2 w-6 inline-block"
                     />
                     <Icon
-                        src={ArrowRightOnRectangle}
+                        src={PencilSquare}
                         theme="solid"
                         class="mx-2 w-6 inline-block"
                     />
@@ -148,15 +168,23 @@
                                         class="mr-2 w-6 inline-block"
                                     />
                                 {/if}
+                            </td>
+                            <td
+                                role="gridcell"
+                                aria-colindex={3}
+                                tabindex="0"
+                                class="cursor-pointer"
+                                on:click={() => navigate(row.type, row.path)}
+                            >
                                 {row.name}
                             </td>
-                            <td role="gridcell" aria-colindex={3} tabindex="0">
+                            <td role="gridcell" aria-colindex={4} tabindex="0">
                                 {row.dateModified}
                             </td>
-                            <td role="gridcell" aria-colindex={4} tabindex="0">
-                                {row.size}
-                            </td>
                             <td role="gridcell" aria-colindex={5} tabindex="0">
+                                {row.size ? formatBytes(row.size) : ""}
+                            </td>
+                            <td role="gridcell" aria-colindex={6} tabindex="0">
                                 {#if row.type !== "back"}
                                     <Icon
                                         src={UserPlus}
@@ -164,15 +192,22 @@
                                         class="mx-2 w-6 inline-block"
                                     />
                                     <Icon
-                                        src={ArrowRightOnRectangle}
+                                        src={PencilSquare}
                                         theme="solid"
                                         class="mx-2 w-6 inline-block"
                                     />
-                                    <Icon
-                                        src={Trash}
-                                        theme="solid"
-                                        class="mx-2 w-6 inline-block"
-                                    />
+                                    <!-- svelte-ignore a11y-click-events-have-key-events -->
+                                    <span
+                                        on:click={() =>
+                                            remove(row.type, row.path)}
+                                        class="cursor-pointer"
+                                    >
+                                        <Icon
+                                            src={Trash}
+                                            theme="solid"
+                                            class="mx-2 w-6 inline-block"
+                                        />
+                                    </span>
                                 {/if}
                             </td>
                         </tr>

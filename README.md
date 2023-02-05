@@ -21,6 +21,7 @@ There are no official links for gd-ed.
 2. Install npm packages
 3. Create drive remote for rclone
 4. Create crypt remote for drive remote
-5. Configure config.json accordingly
+5. Configure .env accordingly
 6. `npm run build`
 7. Run `index.js` file in the build folder
+8. Run `rclone rcd --rc-user <username> --rc-pass <password> --rc-serve` in a separate terminal

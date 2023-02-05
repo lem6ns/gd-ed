@@ -21,7 +21,7 @@ export const handle = SvelteKitAuth({
 				}).then((r) => r.json());
 
 				if (
-					!resp.find(
+					!resp?.find(
 						(server: { id: string }) => server.id === DISCORD_SERVER_ID,
 					)
 				)
