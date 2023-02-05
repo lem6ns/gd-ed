@@ -1,28 +1,24 @@
-import { error } from "@sveltejs/kit";
 import {
 	RCLONE_CRYPT_REMOTE_NAME,
 	RCLONE_RC_PASSWORD,
 	RCLONE_RC_USERNAME,
 } from "$env/static/private";
-import type { RequestHandler } from "../[file]/$types";
+import { json } from "@sveltejs/kit";
+import type { RequestHandler } from "../$types";
 
-export const GET = (async ({ params, locals, setHeaders }) => {
+export const GET = (async ({ params, locals, request }) => {
 	const userId = (await locals.getSession())?.user?.id;
-	const path = params.path.trim().replace(/^\/|\/$/g, "") ?? "";
+	const path = params.path?.trim().replace(/^\/|\/$/g, "");
 
 	if (!userId) {
-		return new Response(
-			JSON.stringify({
-				error: true,
-				data: "Not authenticated",
-			}),
-		);
+		return json({
+			error: true,
+			data: "Not authenticated",
+		});
 	}
 
 	const fileResp = await fetch(
-		`http://127.0.0.1:5572/[${RCLONE_CRYPT_REMOTE_NAME}:]/${userId}${
-			path ? `/${path}` : ""
-		}`,
+		`http://127.0.0.1:5572/[${RCLONE_CRYPT_REMOTE_NAME}:]/${userId}${path.includes("/") ? `/${path}` : path}`,
 		{
 			headers: {
 				Authorization: `Basic ${Buffer.from(
@@ -38,15 +34,10 @@ export const GET = (async ({ params, locals, setHeaders }) => {
 	} catch {}
 
 	if (error) {
-		setHeaders({
-			"content-type": "application/json",
+		return json({
+			error: true,
+			data: "Path does not exist",
 		});
-		return new Response(
-			JSON.stringify({
-				error: true,
-				data: "Path does not exist",
-			}),
-		);
 	}
 	return fileResp;
 }) satisfies RequestHandler;

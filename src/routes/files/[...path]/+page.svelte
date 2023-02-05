@@ -1,6 +1,6 @@
 <script lang="ts">
     import { page, navigating } from "$app/stores";
-    import TableView from "$lib/components/TableView.svelte";
+    import TableView from "$lib/components/Table/TableView.svelte";
     import {
         AppBar,
         ProgressRadial,
@@ -19,9 +19,17 @@
         loading = true;
         $items = (
             await fetch(
-                `/api/files/list/${
-                    $navigating?.to?.params?.path ?? $page.params.path
-                }`
+                `/api/files/list`,
+                {
+                    method: "POST",
+                    headers: {
+                        "content-type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        path:
+                            $navigating?.to?.params?.path ?? $page.params.path,
+                    }),
+                }
             ).then((r) => r.json())
         ).data;
         loading = false;
@@ -38,20 +46,31 @@
             response: async (r: string) => {
                 if (!r) return;
                 const success = !(
-                    await fetch(
-                        `/api/files/newFolder/${
-                            $page.params.path ? `${$page.params.path}/` : ""
-                        }${r}`
-                    ).then((r) => r.json())
+                    await fetch(`/api/files/newFolder`, {
+                        method: "POST",
+                        headers: {
+                            "content-type": "application/json",
+                        },
+                        body: JSON.stringify({
+                            path: `${
+                                $page.params.path ? `${$page.params.path}/` : ""
+                            }${r}`,
+                        }),
+                    }).then((r) => r.json())
                 ).error;
                 if (success) {
                     $items = (
-                        await fetch(
-                            `/api/files/list/${
-                                $navigating?.to?.params?.path ??
-                                $page.params.path
-                            }`
-                        ).then((r) => r.json())
+                        await fetch(`/api/files/list`, {
+                            method: "POST",
+                            headers: {
+                                "content-type": "application/json",
+                            },
+                            body: JSON.stringify({
+                                path:
+                                    $navigating?.to?.params?.path ??
+                                    $page.params.path,
+                            }),
+                        }).then((r) => r.json())
                     ).data;
                     loading = false;
                 }

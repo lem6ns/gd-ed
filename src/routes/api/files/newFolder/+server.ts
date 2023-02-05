@@ -1,0 +1,53 @@
+import {
+	RCLONE_CRYPT_REMOTE_NAME,
+	RCLONE_RC_PASSWORD,
+	RCLONE_RC_USERNAME,
+} from "$env/static/private";
+import { json } from "@sveltejs/kit";
+import type { RequestHandler } from "./$types";
+
+export const POST = (async ({ locals, request }) => {
+	const params = await request.json();
+	const userId = (await locals.getSession())?.user?.id;
+	const path = params.path?.trim().replace(/^\/|\/$/g, "");
+
+	if (!userId) {
+		return json({
+			error: true,
+			data: "Not authenticated",
+		});
+	}
+
+	if (!path) {
+		return json({
+			error: true,
+			data: "No folder name passed",
+		});
+	}
+
+	let mkdir = await fetch("http://127.0.0.1:5572/operations/mkdir", {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+			Authorization: `Basic ${Buffer.from(
+				`${RCLONE_RC_USERNAME}:${RCLONE_RC_PASSWORD}`,
+			).toString("base64")}`,
+		},
+		body: JSON.stringify({
+			fs: `${RCLONE_CRYPT_REMOTE_NAME}:`,
+			remote: `${userId}/${path}`,
+		}),
+	}).then((r) => r.json());
+
+	if (mkdir.error && path !== "") {
+		return json({
+			error: true,
+			data: mkdir.error,
+		});
+	}
+
+	return json({
+		error: false,
+		data: "Created successfully",
+	});
+}) satisfies RequestHandler;
