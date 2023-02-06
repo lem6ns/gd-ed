@@ -7,6 +7,7 @@ import {
 } from "$env/static/private";
 
 export const handle = SvelteKitAuth({
+	trustHost: true,
 	callbacks: {
 		async jwt({ token, account }) {
 			if (account || Number(token.created) + 60 * 60 * 1000 < Date.now()) {
