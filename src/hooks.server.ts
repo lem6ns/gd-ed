@@ -4,19 +4,20 @@ import {
 	DISCORD_ID,
 	DISCORD_SECRET,
 	DISCORD_SERVER_ID,
+	AUTH_SECRET,
 } from "$env/static/private";
 
 export const handle = SvelteKitAuth({
 	trustHost: true,
+	secret: AUTH_SECRET,
 	callbacks: {
 		async jwt({ token, account }) {
-			if (account || Number(token.created) + 60 * 60 * 1000 < Date.now()) {
+			if (account) {
 				token.created = Date.now();
-				token.accessToken = account?.access_token ?? token.accessToken;
 				token.id = account?.providerAccountId ?? token.id;
 				const resp = await fetch("https://discord.com/api/users/@me/guilds", {
 					headers: {
-						Authorization: `Bearer ${token.accessToken}`,
+						Authorization: `Bearer ${account?.access_token}`,
 						"Content-Type": "application/json",
 					},
 				}).then((r) => r.json());

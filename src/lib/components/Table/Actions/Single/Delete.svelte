@@ -12,7 +12,7 @@
             title: "Please Confirm",
             body: `Are you sure you wish to delete ${row.name}?`,
             response: async (r: boolean) => {
-                if (!r) false;
+                if (!r) return;
                 await fetch(
                     `/api/files/${
                         type === "file" ? "delete" : "purge"

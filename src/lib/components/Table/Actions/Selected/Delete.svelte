@@ -26,7 +26,7 @@
             body: `Are you sure you wish to delete ${selected.length} files?`,
             // TRUE if confirm pressed, FALSE if cancel pressed
             response: (r: boolean) => {
-                if (!r) false;
+                if (!r) return;
                 selected.forEach((row) => {
                     remove(row.type, row.path);
                 });
