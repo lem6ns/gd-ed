@@ -20,6 +20,7 @@
     };
 
     const removeSelected = () => {
+        if (!selected.length) return;
         const confirm: ModalSettings = {
             type: "confirm",
             title: "Please Confirm",

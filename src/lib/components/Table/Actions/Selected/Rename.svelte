@@ -39,6 +39,7 @@
     };
 
     const renameSelected = () => {
+        if (!selected.length) return;
         let find: string;
         let replace: string;
         const findPrompt: ModalSettings = {

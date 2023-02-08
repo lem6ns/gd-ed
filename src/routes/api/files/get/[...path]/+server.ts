@@ -1,14 +1,12 @@
-import {
-	RCLONE_CRYPT_REMOTE_NAME,
-	RCLONE_RC_PASSWORD,
-	RCLONE_RC_USERNAME,
-} from "$env/static/private";
+import { RCLONE_CRYPT_MOUNT_PATH } from "$env/static/private";
+import { readFileSync, existsSync } from "node:fs";
 import { json } from "@sveltejs/kit";
 import type { RequestHandler } from "../$types";
 
-export const GET = (async ({ params, locals, request }) => {
+export const GET = (async ({ params, locals }) => {
 	const userId = (await locals.getSession())?.user?.id;
 	const path = params.path?.trim().replace(/^\/|\/$/g, "");
+	const fullPath = `${RCLONE_CRYPT_MOUNT_PATH}/${userId}/${path}`;
 
 	if (!userId) {
 		return json({
@@ -17,27 +15,12 @@ export const GET = (async ({ params, locals, request }) => {
 		});
 	}
 
-	const fileResp = await fetch(
-		`http://127.0.0.1:5572/[${RCLONE_CRYPT_REMOTE_NAME}:]/${userId}${path.includes("/") ? `/${path}` : path}`,
-		{
-			headers: {
-				Authorization: `Basic ${Buffer.from(
-					`${RCLONE_RC_USERNAME}:${RCLONE_RC_PASSWORD}`,
-				).toString("base64")}`,
-			},
-		},
-	);
-
-	let error = false;
-	try {
-		error = Boolean((await fileResp.clone().json()).error);
-	} catch {}
-
-	if (error) {
+	if (!existsSync(fullPath)) {
 		return json({
 			error: true,
 			data: "Path does not exist",
 		});
 	}
-	return fileResp;
+
+	return new Response(readFileSync(fullPath));
 }) satisfies RequestHandler;
