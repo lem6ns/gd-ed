@@ -1,5 +1,5 @@
 # gd-ed
-> THIS IS UNFINISHED
+> THIS IS UNFINISHED, to-do list can be found [here](https://rentry.co/gded-todo)
 
 Google Drive (Encrypted) Enterprise Drive (Cloning)
 
