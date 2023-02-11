@@ -1,4 +1,5 @@
 # gd-ed
+> THIS IS UNFINISHED
 Google Drive (Encrypted) Enterprise Drive (Cloning)
 
 ## Description
@@ -25,3 +26,4 @@ There are no official links for gd-ed.
 6. `npm run build`
 7. Run `index.js` file in the build folder
 8. Run `rclone rcd --rc-user <username> --rc-pass <password> --rc-serve` in a separate terminal
+9. Run `rclone cmount crypt: Y: --vfs-cache-mode full --vfs-cache-max-size 5G --dir-cache-time 10s` in a separate terminal
